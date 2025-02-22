@@ -11,6 +11,7 @@ export const HomeNavbar = () => {
         {/* Menu and Logo */}
         <div className="flex items-center flex-shrink-0">
           <SidebarTrigger />
+          
           <Link href={"/"}>
             <div className="flex items-center gap-1 p-4">
               <Image src={"/logo.svg"} alt={"Logo"} width={32} height={32} />
