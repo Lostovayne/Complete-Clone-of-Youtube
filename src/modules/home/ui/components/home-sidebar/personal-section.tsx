@@ -29,7 +29,7 @@ const items = [
   },
 ];
 
-export const MainSection = () => {
+export const PersonalSection = () => {
   return (
     <SidebarGroup>
       <SidebarGroupContent>
