@@ -1,8 +1,18 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 @plugin 'tailwindcss-animate';
 
 @custom-variant dark (&:is(.dark *));
+
+*,
+::after,
+::before,
+::backdrop,
+html,
+body {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
 
 @theme {
   --color-background: hsl(var(--background));
@@ -176,4 +186,20 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.scroll-hidden {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  scrollbar-color: transparent transparent;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+.scroll-hidden::-webkit-scrollbar {
+  display: none;
+}
+
+.scroll-hidden::-webkit-scrollbar-thumb {
+  background-color: transparent;
 }
