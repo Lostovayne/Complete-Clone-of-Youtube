@@ -15,29 +15,10 @@ export const metadata: Metadata = {
   icons: {
     icon: "/logo.svg",
   },
-  themeColor: "#000000",
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-  },
-  manifest: "/manifest.json",
   category: "social",
   robots: {
     index: true,
     follow: true,
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "NewTube | Your favorite videos, right here",
-    description:
-      "NewTube is a video sharing platform that allows you to share your favorite videos with your friends and family.",
-    images: "/logo.svg",
-  },
-  openGraph: {
-    title: "NewTube | Your favorite videos, right here",
-    description:
-      "NewTube is a video sharing platform that allows you to share your favorite videos with your friends and family.",
-    images: "/logo.svg",
   },
 };
 
