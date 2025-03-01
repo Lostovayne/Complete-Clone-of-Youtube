@@ -9,6 +9,10 @@ export const AuthButton = () => {
   // TODO: Add different auth states
   return (
     <>
+      <SignedIn>
+        <UserButton />
+        {/* Add menu items here for studio and User profile */}
+      </SignedIn>
       <SignedOut>
         <SignInButton mode="modal">
           <Button
@@ -20,9 +24,6 @@ export const AuthButton = () => {
           </Button>
         </SignInButton>
       </SignedOut>
-      <SignedIn>
-        <UserButton />
-      </SignedIn>
     </>
   );
 };
