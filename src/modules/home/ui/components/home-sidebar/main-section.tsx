@@ -49,7 +49,7 @@ export const MainSection = () => {
                     e.preventDefault();
                     return clerk.openSignIn({ redirectUrl: item.url });
                   }
-                }} // TODO: Add onClick handler
+                }}
               >
                 <Link href={item.url} className="flex items-center gap-4">
                   <item.icon />
