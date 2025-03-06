@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "dev:all": "concurrently \"bun run dev\" \"bun run dev:webhook\"",
+    "dev:webhook": "ngrok http --url=musical-stag-luckily.ngrok-free.app 3000",
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
@@ -69,6 +71,7 @@
     "@types/node": "^22.13.6",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
+    "concurrently": "^9.1.2",
     "drizzle-kit": "^0.30.5",
     "eslint": "^9.21.0",
     "eslint-config-next": "15.2.0",
