@@ -1,3 +1,10 @@
-export default function Home() {
-  return <div>I will load videos in the future</div>;
+// "use client";
+
+import { caller, prefetch, trpc } from "@/trpc/server";
+
+export default async function Home() {
+  // prefetch(trpc.hello.queryOptions({ text: "Epsaind" }));
+  const data = await caller.hello({ text: "Epsaind" });
+
+  return <div>Server components {data?.greeting}</div>;
 }

@@ -1,14 +1,25 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { UserCircleIcon } from "lucide-react";
+import { LoaderIcon, UserCircleIcon } from "lucide-react";
 
-import { SignInButton, UserButton, SignedIn, SignedOut } from "@clerk/nextjs";
+import {
+  ClerkLoading,
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  UserButton,
+} from "@clerk/nextjs";
 
 export const AuthButton = () => {
   // TODO: Add different auth states
   return (
     <>
+      <ClerkLoading>
+        <div className="w-full flex items-center justify-center">
+          <LoaderIcon className="h-5 w-5 text-gray-500/80 animate-spin" />
+        </div>
+      </ClerkLoading>
       <SignedIn>
         <UserButton />
         {/* Add menu items here for studio and User profile */}
