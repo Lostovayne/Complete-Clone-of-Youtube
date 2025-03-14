@@ -1,10 +1,10 @@
 // "use client";
 
-import { caller, prefetch, trpc } from "@/trpc/server";
+import { prefetch, trpc } from "@/trpc/server";
+import { ClientPage } from "./client";
 
 export default async function Home() {
-  // prefetch(trpc.hello.queryOptions({ text: "Epsaind" }));
-  const data = await caller.hello({ text: "Epsaind" });
-
-  return <div>Server components {data?.greeting}</div>;
+  prefetch(trpc.hello.queryOptions({ text: "Epsaind" }));
+  // const data = await caller.hello({ text: "Epsaind" });
+  return <ClientPage />;
 }
