@@ -39,6 +39,7 @@
         "@trpc/react-query": "^11.0.0-rc.824",
         "@trpc/server": "^11.0.0-rc.824",
         "@trpc/tanstack-react-query": "^11.0.0-rc.828",
+        "@vercel/speed-insights": "^1.2.0",
         "class-variance-authority": "^0.7.1",
         "client-only": "^0.0.1",
         "clsx": "^2.1.1",
@@ -467,6 +468,8 @@
     "@typescript-eslint/utils": ["@typescript-eslint/utils@8.23.0", "", { "dependencies": { "@eslint-community/eslint-utils": "^4.4.0", "@typescript-eslint/scope-manager": "8.23.0", "@typescript-eslint/types": "8.23.0", "@typescript-eslint/typescript-estree": "8.23.0" }, "peerDependencies": { "eslint": "^8.57.0 || ^9.0.0", "typescript": ">=4.8.4 <5.8.0" } }, "sha512-uB/+PSo6Exu02b5ZEiVtmY6RVYO7YU5xqgzTIVZwTHvvK3HsL8tZZHFaTLFtRG3CsV4A5mhOv+NZx5BlhXPyIA=="],
 
     "@typescript-eslint/visitor-keys": ["@typescript-eslint/visitor-keys@8.23.0", "", { "dependencies": { "@typescript-eslint/types": "8.23.0", "eslint-visitor-keys": "^4.2.0" } }, "sha512-oWWhcWDLwDfu++BGTZcmXWqpwtkwb5o7fxUIGksMQQDSdPW9prsSnfIOZMlsj4vBOSrcnjIUZMiIjODgGosFhQ=="],
+
+    "@vercel/speed-insights": ["@vercel/speed-insights@1.2.0", "", { "peerDependencies": { "@sveltejs/kit": "^1 || ^2", "next": ">= 13", "react": "^18 || ^19 || ^19.0.0-rc", "svelte": ">= 4", "vue": "^3", "vue-router": "^4" }, "optionalPeers": ["@sveltejs/kit", "next", "react", "svelte", "vue", "vue-router"] }, "sha512-y9GVzrUJ2xmgtQlzFP2KhVRoCglwfRQgjyfY607aU0hh0Un6d0OUyrJkjuAlsV18qR4zfoFPs/BiIj9YDS6Wzw=="],
 
     "acorn": ["acorn@8.14.0", "", { "bin": { "acorn": "bin/acorn" } }, "sha512-cl669nCJTZBsL97OF4kUQm5g5hC2uihk0NxY3WENAC0TYdILVkAyHymAntgxGkl7K+t0cXIrH5siy5S4XkFycA=="],
 
