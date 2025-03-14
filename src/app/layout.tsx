@@ -30,9 +30,9 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider afterSignOutUrl={"/"}>
-      <SpeedInsights />
       <html lang="en">
         <body className={`${inter.className} antialiased`}>
+          <SpeedInsights />
           <TRPCProviderClient>{children}</TRPCProviderClient>
         </body>
       </html>
