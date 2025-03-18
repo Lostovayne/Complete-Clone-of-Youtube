@@ -1,4 +1,3 @@
-
 # NewTube - YouTube Clone
 
 A modern, feature-rich YouTube clone built with Next.js, TypeScript, and Tailwind CSS. This project demonstrates the implementation of a video-sharing platform with a focus on user experience and performance.
@@ -7,12 +6,14 @@ A modern, feature-rich YouTube clone built with Next.js, TypeScript, and Tailwin
 
 ## 📸 Demo
 
-![NewTube Demo](public/demo.png)
+![NewTube Demo](public/demo.jpeg)
 
-*Screenshot of NewTube's home page interface*
+_Screenshot of NewTube's home page interface_
+
 ## 🚀 Features
 
 ### Implemented
+
 - ✅ Modern and responsive UI using Tailwind CSS
 - ✅ Server-side rendering with Next.js
 - ✅ Custom authentication system
@@ -22,6 +23,7 @@ A modern, feature-rich YouTube clone built with Next.js, TypeScript, and Tailwin
 - ✅ Radix UI components integration
 
 ### Planned
+
 - 📝 Video upload and processing
 - 📝 User profiles and channels
 - 📝 Video recommendations
@@ -58,12 +60,14 @@ A modern, feature-rich YouTube clone built with Next.js, TypeScript, and Tailwin
 ## 🚀 Getting Started
 
 1. **Clone the repository**
+
    ```bash
    git clone [repository-url]
    cd youtube-clone
    ```
 
 2. **Install dependencies**
+
    ```bash
    bun install
    # or
@@ -71,6 +75,7 @@ A modern, feature-rich YouTube clone built with Next.js, TypeScript, and Tailwin
    ```
 
 3. **Run the development server**
+
    ```bash
    bun dev
    # or

@@ -31,6 +31,7 @@ export const protectedProcedure = t.procedure.use(async function isAuthed(opts) 
   if (!opts.ctx.clerkUserId) {
     throw new TRPCError({ code: "UNAUTHORIZED", message: "You are not authorized to access this resource" });
   }
+  // TODO: Revisar el error de tipo TRPCError
   return opts.next({
     ...ctx,
   });
