@@ -1,5 +1,8 @@
+import { db } from "@/db";
+import { users } from "@/db/schema";
 import { auth } from "@clerk/nextjs/server";
 import { initTRPC, TRPCError } from "@trpc/server";
+import { eq } from "drizzle-orm";
 import { cache } from "react";
 import superjson from "superjson";
 
@@ -28,11 +31,22 @@ export const baseProcedure = t.procedure;
 // Comprobar si el usuario está autenticado y si no lo es, lanzar una excepción
 export const protectedProcedure = t.procedure.use(async function isAuthed(opts) {
   const { ctx } = opts;
-  if (!opts.ctx.clerkUserId) {
+
+  if (!ctx.clerkUserId) {
     throw new TRPCError({ code: "UNAUTHORIZED", message: "You are not authorized to access this resource" });
   }
+
+  // Obtener los datos del usuario desde la base de datos
+  const [user] = await db.select().from(users).where(eq(users.clerkId, ctx.clerkUserId)).limit(1);
+  if (!user) {
+    throw new TRPCError({ code: "UNAUTHORIZED", message: "Not user found in database" });
+  }
+
   // TODO: Revisar el error de tipo TRPCError
   return opts.next({
-    ...ctx,
+    ctx: {
+      ...ctx,
+      user,
+    },
   });
 });
