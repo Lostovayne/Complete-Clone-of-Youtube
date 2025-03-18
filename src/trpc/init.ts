@@ -4,7 +4,9 @@ import { cache } from "react";
 import superjson from "superjson";
 
 export const createTRPCContext = cache(async () => {
+  // TODO: Generate a problem for building the app
   const { userId } = await auth();
+  console.log("clerkUserId", userId);
   return {
     clerkUserId: userId,
   };
