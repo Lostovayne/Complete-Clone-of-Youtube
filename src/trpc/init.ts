@@ -6,6 +6,9 @@ import { eq } from "drizzle-orm";
 import { cache } from "react";
 import superjson from "superjson";
 
+// Upstash
+import { ratelimit } from "@/lib/ratelimit";
+
 export const createTRPCContext = cache(async () => {
   // TODO: Generate a problem for building the app
   const { userId } = await auth();
@@ -15,7 +18,6 @@ export const createTRPCContext = cache(async () => {
 });
 
 export type Context = Awaited<ReturnType<typeof createTRPCContext>>;
-
 // Add your own context type here
 const t = initTRPC.context<Context>().create({
   /**
@@ -23,10 +25,15 @@ const t = initTRPC.context<Context>().create({
    */
   transformer: superjson,
 });
+
 // Base router and procedure helpers
 export const createTRPCRouter = t.router;
 export const createCallerFactory = t.createCallerFactory;
 export const baseProcedure = t.procedure;
+
+// Create a Redis instance
+
+// Create a Ratelimit instance
 
 // Comprobar si el usuario está autenticado y si no lo es, lanzar una excepción
 export const protectedProcedure = t.procedure.use(async function isAuthed(opts) {
@@ -41,8 +48,12 @@ export const protectedProcedure = t.procedure.use(async function isAuthed(opts) 
   if (!user) {
     throw new TRPCError({ code: "UNAUTHORIZED", message: "Not user found in database" });
   }
+  // Comprobar si el usuario ha superado el límite de peticiones
+  const { success } = await ratelimit.limit(user.id);
+  if (!success) {
+    throw new TRPCError({ code: "TOO_MANY_REQUESTS" });
+  }
 
-  // TODO: Revisar el error de tipo TRPCError
   return opts.next({
     ctx: {
       ...ctx,

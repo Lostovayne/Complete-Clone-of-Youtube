@@ -46,6 +46,8 @@
     "@trpc/react-query": "^11.0.0-rc.824",
     "@trpc/server": "^11.0.0-rc.824",
     "@trpc/tanstack-react-query": "^11.0.0-rc.828",
+    "@upstash/ratelimit": "^2.0.5",
+    "@upstash/redis": "^1.34.5",
     "@vercel/speed-insights": "^1.2.0",
     "class-variance-authority": "^0.7.1",
     "client-only": "^0.0.1",
