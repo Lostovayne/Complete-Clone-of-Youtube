@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { baseProcedure, createTRPCRouter, protectedProcedure } from "../init";
+import { createTRPCRouter, protectedProcedure } from "../init";
 export const appRouter = createTRPCRouter({
   hello: protectedProcedure
     .input(
