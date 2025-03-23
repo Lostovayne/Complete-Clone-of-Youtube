@@ -1,5 +1,5 @@
 "use client";
-
+import { FilterCarousel } from "@/components/filter-carousel";
 import { useTRPC } from "@/trpc/client";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { Suspense } from "react";
@@ -22,6 +22,9 @@ export const CategoriesSection = ({ categoryId }: CategoriesSectionProps) => {
 export const CategoriesSectionSuspense = ({ categoryId }: CategoriesSectionProps) => {
   const trpc = useTRPC();
   const { data } = useSuspenseQuery(trpc.categories.getMany.queryOptions());
-
-  return <div>{JSON.stringify(data)}</div>;
+  const categories = data.map((category) => ({
+    value: category.id,
+    label: category.name,
+  }));
+  return <FilterCarousel data={categories} value={categoryId} />;
 };
