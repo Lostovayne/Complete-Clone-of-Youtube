@@ -1,9 +1,10 @@
 import { SidebarProvider } from "@/components/ui/sidebar";
+import { JSX } from "react";
 import { HomeNavbar } from "../components/home-navbar";
 import { HomeSidebar } from "../components/home-sidebar";
 
 interface HomeLayoutProps {
-  children: React.ReactNode;
+  children: JSX.Element;
 }
 
 export const HomeLayout = ({ children }: HomeLayoutProps) => {
