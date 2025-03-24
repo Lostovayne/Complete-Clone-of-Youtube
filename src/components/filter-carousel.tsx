@@ -1,7 +1,7 @@
 "use client";
 
 import { Badge } from "./ui/badge";
-import { Carousel, CarouselContent, CarouselItem } from "./ui/carousel";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "./ui/carousel";
 
 interface FilterCarouselProps {
   value?: string | null;
@@ -33,7 +33,7 @@ export const FilterCarousel = ({ value, isLoading, onSelect, data }: FilterCarou
             </Badge>
           </CarouselItem>
           {data.map((item) => (
-            <CarouselItem key={item.value} className="pl-3 basis-auto" >
+            <CarouselItem key={item.value} className="pl-3 basis-auto">
               <Badge
                 variant={value === item.value ? "default" : "secondary"}
                 className="rounded-lg px-3 py-1 cursor-pointer whitespace-nowrap text-sm"
@@ -44,6 +44,8 @@ export const FilterCarousel = ({ value, isLoading, onSelect, data }: FilterCarou
             </CarouselItem>
           ))}
         </CarouselContent>
+        <CarouselPrevious className="left-0 z-20" />
+        <CarouselNext className="right-0 z-20" />
       </Carousel>
     </div>
   );
