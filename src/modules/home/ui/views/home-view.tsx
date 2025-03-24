@@ -1,5 +1,7 @@
 import { CategoriesSection } from "../sections/categories-section";
 
+export const dynamic = "force-dynamic";
+
 interface HomeViewProps {
   categoryId?: string;
 }

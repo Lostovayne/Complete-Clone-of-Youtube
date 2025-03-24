@@ -14,7 +14,6 @@ interface FilterCarouselProps {
 }
 
 export const FilterCarousel = ({ value, isLoading, onSelect, data }: FilterCarouselProps) => {
-  console.log("Midata", data);
   return (
     <div className="relative w-full">
       <Carousel
