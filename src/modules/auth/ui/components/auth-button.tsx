@@ -1,15 +1,9 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { LoaderIcon, UserCircleIcon } from "lucide-react";
+import { ClapperboardIcon, LoaderIcon, UserCircleIcon } from "lucide-react";
 
-import {
-  ClerkLoading,
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  UserButton,
-} from "@clerk/nextjs";
+import { ClerkLoading, SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 
 export const AuthButton = () => {
   // TODO: Add different auth states
@@ -21,7 +15,11 @@ export const AuthButton = () => {
         </div>
       </ClerkLoading>
       <SignedIn>
-        <UserButton />
+        <UserButton>
+          <UserButton.MenuItems>
+            <UserButton.Link href="/studio" label="Studio" labelIcon={<ClapperboardIcon className="size-4" />} />
+          </UserButton.MenuItems>
+        </UserButton>
         {/* Add menu items here for studio and User profile */}
       </SignedIn>
       <SignedOut>
