@@ -8,13 +8,6 @@ A modern, feature-rich YouTube clone built with Next.js, TypeScript, and Tailwin
 
 ### Implemented
 - ✅ **Modern and responsive UI** using Tailwind CSS with mobile-first approach
-- ✅ **Prompt Caching** with Anthropic's caching feature for optimized AI responses
-- ✅ **External tool integration** with IBM's wxflows for YouTube transcripts and Google Books APIs
-- ✅ **Advanced AI orchestration** using LangChain and LangGraph for state management and tool usage
-- ✅ **Custom streaming solutions** for Next.js 15 with real-time token streaming
-- ✅ **Modern chat interface** with real-time updates and tool visualization
-- ✅ **Enhanced authentication** with Clerk and Convex for user management and chat persistence
-- ✅ **Claude 3.5 Sonnet integration** for advanced AI capabilities with 4096 token context window
 - ✅ **Server-side rendering** with Next.js 15 and App Router
 - ✅ **Authentication system** using Clerk for secure user management
 - ✅ **Navigation sidebar** with responsive design for different screen sizes
@@ -38,14 +31,6 @@ A modern, feature-rich YouTube clone built with Next.js, TypeScript, and Tailwin
 - 📝 **Notifications system** for user engagement
 
 ## 🛠️ Tech Stack
-
-### AI & Advanced Integrations
-- **Prompt Optimization:** Anthropic caching for reduced token usage
-- **Tool Integration:** IBM wxflows for rapid data source integration
-- **AI Orchestration:** LangChain with LangGraph for state management and tool nodes
-- **Streaming Solutions:** Custom Next.js 15 implementations with proper error handling
-- **Chat Interface:** Real-time updates with message history and tool visualization
-- **AI Models:** Claude 3.5 Sonnet with tool-augmented responses
 
 ### Frontend
 - **Framework:** Next.js 15 with TypeScript and App Router
@@ -157,14 +142,6 @@ A modern, feature-rich YouTube clone built with Next.js, TypeScript, and Tailwin
 6. Open [http://localhost:3000](http://localhost:3000) in your browser
 
 ## 🔧 Development
-
-### Advanced Implementation Details
-- **Prompt Caching:** Configured to cache frequent AI responses while maintaining freshness
-- **Tool Nodes:** Implemented with proper state management using StateGraph
-- **Memory Management:** Integrated MemorySaver for efficient context handling
-- **Message Trimming:** Intelligent trimming algorithm for optimal context management
-- **Streaming Architecture:** Custom solution bypassing LangChainAdapter limitations
-- **Production Deployment:** Vercel with environment variables and performance tuning
 
 ### Available Scripts
 
