@@ -9,7 +9,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { LogOutIcon } from "lucide-react";
+import { LogOutIcon, VideoIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { StudioSidebarHeader } from "./studio-sidebar-header";
@@ -26,7 +26,7 @@ export const StudioSidebar = () => {
             <SidebarMenuItem>
               <SidebarMenuButton isActive={pathname === "/studio"} tooltip={"Content"} asChild>
                 <Link href={"/studio"} prefetch>
-                  <LogOutIcon className="size-5" />
+                  <VideoIcon className="size-5" />
                   <span className="text-sm">Content</span>
                 </Link>
               </SidebarMenuButton>
