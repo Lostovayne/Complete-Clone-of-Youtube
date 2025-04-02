@@ -44,3 +44,7 @@ export const videoRelations = relations(videos,({one})=> ({
     references:[users.id]
   })
 }))
+
+
+
+//comment table
