@@ -1,4 +1,5 @@
 import { pgTable, text, timestamp, uniqueIndex, uuid } from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm";
 
 export const users = pgTable(
   "users",
@@ -27,3 +28,19 @@ export const categories = pgTable(
 );
 
 // export type CategoriesType = typeof categories.$inferSelect
+
+export const videos = pgTable("videos", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  title: text("title").notNull(),
+  description: text("description"),
+  userId:uuid("user_id").references(()=>users.id,{ onDelete: "cascade" }).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const videoRelations = relations(videos,({one})=> ({
+  user:one(users,{
+    fields:[videos.userId],
+    references:[users.id]
+  })
+}))
