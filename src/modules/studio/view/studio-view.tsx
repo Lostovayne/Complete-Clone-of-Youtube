@@ -1,3 +1,5 @@
+import { VideosSection } from "../ui/sections/videos-section";
+
 export const StudioView = () => {
-  return <div>Studio View</div>;
+  return <VideosSection />;
 };
