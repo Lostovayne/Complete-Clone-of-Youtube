@@ -6,6 +6,7 @@
     "dev:all": "concurrently \"bun run dev\" \"bun run dev:webhook\"",
     "dev:webhook": "ngrok http --url=musical-stag-luckily.ngrok-free.app 3000",
     "dev": "next dev --turbopack",
+    "drizzle:push": "drizzle-kit push",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",

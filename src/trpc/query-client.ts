@@ -14,6 +14,7 @@ export function makeQueryClient() {
       },
       hydrate: {
         deserializeData: superjson.deserialize,
+        
       },
     },
   });
