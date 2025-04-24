@@ -15,8 +15,8 @@ export const StudioUploadModal = () => {
         toast.success("Video Creado con exito");
         queryClient.invalidateQueries({ refetchType: "active" });
       },
-      onError: (err) => {
-        toast.error(err.message);
+      onError: () => {
+        toast.error("Error al crear el video");
       }
     })
   );
