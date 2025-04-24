@@ -3,7 +3,8 @@
 import { Button } from "@/components/ui/button";
 import { useTRPC } from "@/trpc/client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { PlusIcon } from "lucide-react";
+import { Loader2Icon, PlusIcon } from "lucide-react";
+import { toast } from "sonner";
 
 export const StudioUploadModal = () => {
   const trpc = useTRPC();
@@ -11,8 +12,12 @@ export const StudioUploadModal = () => {
   const create = useMutation(
     trpc.videos.create.mutationOptions({
       onSuccess: () => {
+        toast.success("Video Creado con exito");
         queryClient.invalidateQueries({ refetchType: "active" });
       },
+      onError: (err) => {
+        toast.error(err.message);
+      }
     })
   );
 
@@ -21,8 +26,9 @@ export const StudioUploadModal = () => {
       variant={"secondary"}
       onClick={() => create.mutate()}
       className="cursor-pointer"
+      disabled={create.isPending}
     >
-      <PlusIcon />
+      {create.isPending ? <Loader2Icon className="animate-spin" /> : <PlusIcon />}
       Create
     </Button>
   );
