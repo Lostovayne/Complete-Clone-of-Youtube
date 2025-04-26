@@ -1,23 +1,18 @@
-"use client";
-import { DEFAULT_LIMIT } from "@/constants";
-import { useTRPC } from "@/trpc/client";
-import { useSuspenseInfiniteQuery } from "@tanstack/react-query";
+import { VideosSection } from "../ui/sections/videos-section";
+
 
 export const StudioView = () => {
-  const trpc = useTRPC();
-  const { data } = useSuspenseInfiniteQuery(
-    trpc.studio.getMany.infiniteQueryOptions(
-      { limit: DEFAULT_LIMIT },
-      {
-        getNextPageParam(lastPage) {
-          return lastPage.nextCursor;
-        },
-      }
-    )
-  );
+  return (
+    <div className="flex flex-col gap-y-6 pt-2.5" >
+      <div className="px-4" >
+        <h1 className="text-2xl font-bold" >Channel Content</h1>
+        <p className="text-xs text-muted-foreground" >
+          Manage your channel content and videos
+        </p>
+      </div>
+      <VideosSection /> 
+    </div>
 
-  console.log({data}); // nul
 
-  // return <VideosSection />;
-  return <div>{JSON.stringify(data)}</div>;
+  )
 };
