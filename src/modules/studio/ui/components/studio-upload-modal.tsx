@@ -6,6 +6,7 @@ import { useTRPC } from "@/trpc/client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Loader2Icon, PlusIcon } from "lucide-react";
 import { toast } from "sonner";
+import { StudioUploader } from "./studio-uploader";
 
 export const StudioUploadModal = () => {
   const trpc = useTRPC();
@@ -25,8 +26,8 @@ export const StudioUploadModal = () => {
 
   return (
     <>
-      <ResponsiveModal title="Upload a video" open={!!create.data} onOpenChange={() => create.reset()}>
-        <p>This is a Modal Uploader</p>
+      <ResponsiveModal title="Upload a video" open={!!create.data?.url} onOpenChange={() => create.reset()}>
+        {create.data?.url ? <StudioUploader endpoint={create.data?.url} onSuccess={() => {}} /> : <Loader2Icon />}
       </ResponsiveModal>
 
       <Button
