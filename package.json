@@ -7,6 +7,7 @@
     "dev:webhook": "ngrok http --url=musical-stag-luckily.ngrok-free.app 3000",
     "dev": "next dev --turbopack",
     "drizzle:push": "drizzle-kit push",
+    "drizzle:studio":"drizzle-kit studio",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
