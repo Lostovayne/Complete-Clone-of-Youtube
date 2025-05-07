@@ -1,5 +1,6 @@
 "use client";
 
+import { ResponsiveModal } from "@/components/responsive-dialog";
 import { Button } from "@/components/ui/button";
 import { useTRPC } from "@/trpc/client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -9,6 +10,7 @@ import { toast } from "sonner";
 export const StudioUploadModal = () => {
   const trpc = useTRPC();
   const queryClient = useQueryClient();
+
   const create = useMutation(
     trpc.videos.create.mutationOptions({
       onSuccess: () => {
@@ -17,19 +19,25 @@ export const StudioUploadModal = () => {
       },
       onError: () => {
         toast.error("Error al crear el video");
-      }
+      },
     })
   );
 
   return (
-    <Button
-      variant={"secondary"}
-      onClick={() => create.mutate()}
-      className="cursor-pointer"
-      disabled={create.isPending}
-    >
-      {create.isPending ? <Loader2Icon className="animate-spin" /> : <PlusIcon />}
-      Create
-    </Button>
+    <>
+      <ResponsiveModal title="Upload a video" open={!!create.data} onOpenChange={() => create.reset()}>
+        <p>This is a Modal Uploader</p>
+      </ResponsiveModal>
+
+      <Button
+        variant={"secondary"}
+        onClick={() => create.mutate()}
+        className="cursor-pointer"
+        disabled={create.isPending}
+      >
+        {create.isPending ? <Loader2Icon className="animate-spin" /> : <PlusIcon />}
+        Create
+      </Button>
+    </>
   );
 };

@@ -30,15 +30,13 @@ export const FilterCarousel = ({ value, isLoading, onSelect, data }: FilterCarou
     });
   }, [api]);
 
-  console.log(isLoading);
-
   return (
     <div className="relative w-full">
       {/* Left fade */}
       <div
         className={cn(
-          "absolute left-12 top-0 bottom-0 w-12 z-10 bg-gradient-to-r from-white to-transparent pointer-events-none",
-          current === 1 && "hidden"
+          "absolute left-12 top-0 bottom-0 w-12 z-10 bg-gradient-to-r from-white to-transparent pointer-events-none"
+          // current === 1 && "hidden"
         )}
       />
 
