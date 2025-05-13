@@ -9,6 +9,9 @@ import {
 } from "@mux/mux-node/resources/webhooks";
 import { NextRequest } from "next/server";
 import { mux } from "@/lib/mux";
+import { db } from "@/db";
+import { videos } from "@/db/schema";
+
 
 const SIGNING_SECRET = process.env.MUX_WEBHOOK_SECRET!;
 
@@ -38,30 +41,37 @@ export const POST = async (request: NextRequest) => {
     {
       "mux-signature": muxSignature,
     },
-    SIGNING_SECRET,
-  )
+    SIGNING_SECRET
+  );
 
   switch (payload.type as WebHookEvent["type"]) {
     case "video.asset.created": {
+      const data = payload.data as VideoAssetCreatedWebhookEvent["data"];
 
+      if (!data.upload_id) {
+        return new Response("Upload ID is not set", { status: 400 });
+      }
+
+      await db
+        .update(videos)
+        .set({
+          muxAssetId: data.id,
+          muxStatus: data.status,
+        })
+        .where(eq(videos.muxUploadId, data.upload_id));
     }
 
-    case "video.asset.ready": {
-      
-    }
+    // case "video.asset.ready": {
+    // }
 
-    case "video.asset.errored": {
-      
-    }
+    // case "video.asset.errored": {
+    // }
 
-    case "video.asset.track.ready": {
-      
-    }
+    // case "video.asset.track.ready": {
+    // }
 
-    default: {
-      
-    }
+    // default: {
+    // }
   }
-
-
+  return new Response("Webhook received", { status: 200 });
 };
