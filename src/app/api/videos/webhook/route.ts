@@ -46,11 +46,9 @@ export const POST = async (request: NextRequest) => {
   switch (payload.type as WebHookEvent["type"]) {
     case "video.asset.created": {
       const data = payload.data as VideoAssetCreatedWebhookEvent["data"];
-
       if (!data.upload_id) {
         return new Response("Upload ID is not set", { status: 400 });
       }
-
       await db
         .update(videos)
         .set({
