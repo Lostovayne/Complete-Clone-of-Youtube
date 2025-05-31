@@ -4,7 +4,7 @@ interface VideoThumbnailProps {
   imageUrl?: string | null;
   previewUrl?: string | null;
   title: string;
-  duration: number;
+  duration: number | null;
 }
 
 export const VideoThumbnail = ({ imageUrl, previewUrl, title, duration }: VideoThumbnailProps) => {
