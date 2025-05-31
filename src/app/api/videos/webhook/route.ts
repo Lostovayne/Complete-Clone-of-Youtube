@@ -70,7 +70,7 @@ export const POST = async (request: NextRequest) => {
         return new Response("Missing playback ID ", { status: 400 });
       }
       const thumbnailUrl = `https://image.mux.com/${playbackId}/thumbnail.png`;
-      const previewUrl = `https://stream.mux.com/${playbackId}/animated.gif`;
+      const previewUrl = `https://image.mux.com/${playbackId}/animated.gif`;
       const duration = data.duration ? Math.round(data.duration * 1000) : 0;
 
       await db
