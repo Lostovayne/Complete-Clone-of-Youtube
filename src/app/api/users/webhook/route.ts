@@ -84,5 +84,7 @@ export async function POST(req: Request) {
       .where(eq(users.clerkId, data.id));
   }
 
+  
+
   return new Response("Webhook received", { status: 200 });
 }

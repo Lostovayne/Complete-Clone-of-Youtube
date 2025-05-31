@@ -58,8 +58,34 @@ export const POST = async (request: NextRequest) => {
         .where(eq(videos.muxUploadId, data.upload_id));
     }
 
-    // case "video.asset.ready": {
-    // }
+    case "video.asset.ready": {
+      const data = payload.data as VideoAssetReadyWebhookEvent["data"];
+      const playbackId = data.playback_ids?.[0]?.id;
+
+      if (!data.upload_id) {
+        return new Response("Upload ID is not set", { status: 400 });
+      }
+
+      if (!playbackId) {
+        return new Response("Missing playback ID ", { status: 400 });
+      }
+      const thumbnailUrl = `https://image.mux.com/${playbackId}/thumbnail.png`;
+      const previewUrl = `https://stream.mux.com/${playbackId}/animated.gif`;
+      const duration = data.duration ? Math.round(data.duration * 1000) : 0;
+
+      await db
+        .update(videos)
+        .set({
+          muxStatus: data.status,
+          muxPlaybackId: playbackId,
+          muxAssetId: data.id,
+          thumbnailUrl,
+          previewUrl,
+          duration,
+        })
+        .where(eq(videos.muxUploadId, data.upload_id));
+      break;
+    }
 
     // case "video.asset.errored": {
     // }

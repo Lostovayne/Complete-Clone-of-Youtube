@@ -6,14 +6,7 @@ import { useSuspenseInfiniteQuery } from "@tanstack/react-query";
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { VideoThumbnail } from "@/modules/videos/ui/components/video-thumbnail";
 import Link from "next/link";
 
@@ -69,7 +62,11 @@ export const VideosSectionSuspense = () => {
                     <TableCell>
                       <div className="flex items-center gap-4">
                         <div className="relative aspect-video w-36 shrink-0">
-                          <VideoThumbnail />
+                          <VideoThumbnail
+                            imageUrl={video.thumbnailUrl}
+                            previewUrl={video.previewUrl}
+                            title={video.title}
+                          />
                         </div>
                       </div>
                     </TableCell>
