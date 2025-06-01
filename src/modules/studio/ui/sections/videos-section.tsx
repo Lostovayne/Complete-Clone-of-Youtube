@@ -1,14 +1,16 @@
 "use client";
 import { InfiniteScroll } from "@/components/infinite-scroll";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { DEFAULT_LIMIT } from "@/constants";
+import { snakeCaseToTitleCase } from "@/lib/utils";
+import { VideoThumbnail } from "@/modules/videos/ui/components/video-thumbnail";
 import { useTRPC } from "@/trpc/client";
 import { useSuspenseInfiniteQuery } from "@tanstack/react-query";
-import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
+import { format } from "date-fns"
 
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { VideoThumbnail } from "@/modules/videos/ui/components/video-thumbnail";
 import Link from "next/link";
+import { Suspense } from "react";
 
 export const VideosSection = () => {
   return (
@@ -69,11 +71,25 @@ export const VideosSectionSuspense = () => {
                             duration={video.duration || 0}
                           />
                         </div>
+                        <div className="flex flex-col overflow-hidden gap-y-1">
+                          <span className="text-sm text-muted-foreground line-clamp-1">{video.title}</span>
+                          <span className="text-xs line-clamp-1">
+                            {video.description || "No description"}
+                          </span>
+                        </div>
                       </div>
                     </TableCell>
-                    <TableCell>Visibility</TableCell>
-                    <TableCell>Status</TableCell>
-                    <TableCell>Date</TableCell>
+                    <TableCell>
+                      {video.visibility}
+                    </TableCell>
+                    <TableCell className="text-sm truncate" >
+                      <div className="flex items-center">
+                        {snakeCaseToTitleCase(video.muxStatus || "error loading")}
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      {format(video.createdAt, "d MMM yyyy")}
+                    </TableCell>
                     <TableCell>Views</TableCell>
                     <TableCell>Comments</TableCell>
                     <TableCell>Likes</TableCell>

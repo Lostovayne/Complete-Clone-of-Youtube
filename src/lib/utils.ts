@@ -11,3 +11,9 @@ export const formatDuration = (duration: number) => {
 
   return `${minutes.toString().padStart(2, "0")}: ${seconds.toString().padStart(2, "0")}`;
 };
+
+
+
+export const snakeCaseToTitleCase = (str: string) => {
+  return str.replace(/_/g, " ").replace(/\b\w/g, (match) => match.toUpperCase());
+};

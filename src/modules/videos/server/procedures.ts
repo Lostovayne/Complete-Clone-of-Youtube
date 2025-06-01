@@ -19,6 +19,16 @@ export const videosRouter = createTRPCRouter({
             resolution: "audio-only",
           },
         ],
+        input: [
+          {
+            generated_subtitles: [
+              {
+                language_code: "en",
+                name: "English",
+              },
+            ],
+          },
+        ],
         // mp4_support: "standard", // TODO: Property is deprecated
       },
       cors_origin: "*", // TODO: In production this should be restricted to the domain of the app
