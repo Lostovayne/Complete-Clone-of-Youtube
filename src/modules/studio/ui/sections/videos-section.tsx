@@ -6,9 +6,10 @@ import { snakeCaseToTitleCase } from "@/lib/utils";
 import { VideoThumbnail } from "@/modules/videos/ui/components/video-thumbnail";
 import { useTRPC } from "@/trpc/client";
 import { useSuspenseInfiniteQuery } from "@tanstack/react-query";
+import { format } from "date-fns";
 import { ErrorBoundary } from "react-error-boundary";
-import { format } from "date-fns"
 
+import { GlobeIcon, LockIcon } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
 
@@ -80,16 +81,21 @@ export const VideosSectionSuspense = () => {
                       </div>
                     </TableCell>
                     <TableCell>
-                      {video.visibility}
+                      <div className="flex items-center">
+                        {video.visibility === "private" ? (
+                          <LockIcon className="size-4 mr-2" />
+                        ) : (
+                          <GlobeIcon className="size-4 mr-2" />
+                        )}
+                        {snakeCaseToTitleCase(video.visibility)}
+                      </div>
                     </TableCell>
-                    <TableCell className="text-sm truncate" >
+                    <TableCell className="text-sm truncate">
                       <div className="flex items-center">
                         {snakeCaseToTitleCase(video.muxStatus || "error loading")}
                       </div>
                     </TableCell>
-                    <TableCell>
-                      {format(video.createdAt, "d MMM yyyy")}
-                    </TableCell>
+                    <TableCell>{format(video.createdAt, "d MMM yyyy")}</TableCell>
                     <TableCell>Views</TableCell>
                     <TableCell>Comments</TableCell>
                     <TableCell>Likes</TableCell>
