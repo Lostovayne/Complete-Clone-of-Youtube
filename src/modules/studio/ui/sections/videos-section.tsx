@@ -1,13 +1,6 @@
 "use client";
 import { InfiniteScroll } from "@/components/infinite-scroll";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { DEFAULT_LIMIT } from "@/constants";
 import { snakeCaseToTitleCase } from "@/lib/utils";
 import { VideoThumbnail } from "@/modules/videos/ui/components/video-thumbnail";
@@ -16,13 +9,14 @@ import { useSuspenseInfiniteQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { ErrorBoundary } from "react-error-boundary";
 
+import { Skeleton } from "@/components/ui/skeleton";
 import { GlobeIcon, LockIcon } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
 
 export const VideosSection = () => {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<VideoSectionSkeleton />}>
       <ErrorBoundary fallback={<p>Error...</p>}>
         <VideosSectionSuspense />
       </ErrorBoundary>
@@ -46,7 +40,41 @@ const VideoSectionSkeleton = () => {
               <TableHead className="">Likes</TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody></TableBody>
+          <TableBody>
+            {Array.from({ length: 4 }).map((_, index) => (
+              <TableRow key={index}>
+                <TableCell className="pl-6">
+                  <div className="flex items-center gap-4">
+                    <Skeleton className="h-20 w-36" />
+                    <div className="flex flex-col gap-2">
+                      <Skeleton className="h-4 w-48" />
+                      <Skeleton className="h-3 w-64" />
+                    </div>
+                  </div>
+                </TableCell>
+
+                <TableCell>
+                  <div className="flex items-center">
+                    <GlobeIcon className="size-4 mr-2" />
+                    Public
+                  </div>
+                </TableCell>
+                <TableCell>Ready</TableCell>
+                <TableCell>
+                  <Skeleton className="h-3 w-16" />
+                </TableCell>
+                <TableCell>
+                  <Skeleton className="h-3 w-10" />
+                </TableCell>
+                <TableCell>
+                  <Skeleton className="h-3 w-16" />
+                </TableCell>
+                <TableCell>
+                  <Skeleton className="h-3 w-10" />
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
         </Table>
       </div>
     </>
@@ -103,9 +131,7 @@ export const VideosSectionSuspense = () => {
                           />
                         </div>
                         <div className="flex flex-col overflow-hidden gap-y-1">
-                          <span className="text-sm text-muted-foreground line-clamp-1">
-                            {video.title}
-                          </span>
+                          <span className="text-sm text-muted-foreground line-clamp-1">{video.title}</span>
                           <span className="text-xs line-clamp-1">
                             {video.description || "No description"}
                           </span>
