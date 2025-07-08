@@ -18,6 +18,7 @@ export const VideoThumbnail = ({ imageUrl, previewUrl, title, duration }: VideoT
           alt={title}
           fill
           className="object-cover size-full group-hover:opacity-0"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
         <Image
           src={previewUrl || "/placeholder.svg"}
@@ -25,6 +26,7 @@ export const VideoThumbnail = ({ imageUrl, previewUrl, title, duration }: VideoT
           unoptimized={!!previewUrl}
           fill
           className="object-cover size-full opacity-0 group-hover:opacity-100"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
       </div>
 
