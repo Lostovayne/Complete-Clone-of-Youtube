@@ -11,8 +11,10 @@ const VideoPage = async ({ params }: VideoPageProps) => {
   const { videoId } = await params;
   prefetch(trpc.studio.getOne.queryOptions({ id: videoId }));
 
-  return <HydrateClient>
-    <VideoView videoId={videoId} />
-  </HydrateClient>;
+  return (
+    <HydrateClient>
+      <VideoView videoId={videoId} />
+    </HydrateClient>
+  );
 };
 export default VideoPage;

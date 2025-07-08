@@ -3,7 +3,7 @@ interface VideoViewProps {
 }
 
 const VideoView = ({ videoId }: VideoViewProps) => {
-  return <div>{videoId}</div>;
+  return <div className="px-4 pt-2.5 max-w-screen-lg">{videoId}</div>;
 };
 
 export default VideoView;

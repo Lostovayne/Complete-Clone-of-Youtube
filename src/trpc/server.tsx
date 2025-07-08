@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import "server-only"; // <-- ensure this file cannot be imported from the client
 
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
