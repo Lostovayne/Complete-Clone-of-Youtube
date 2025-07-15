@@ -9,7 +9,9 @@ interface VideoPageProps {
 
 const VideoPage = async ({ params }: VideoPageProps) => {
   const { videoId } = await params;
+
   prefetch(trpc.studio.getOne.queryOptions({ id: videoId }));
+  prefetch(trpc.categories.getMany.queryOptions())
 
   return (
     <HydrateClient>

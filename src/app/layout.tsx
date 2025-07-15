@@ -33,7 +33,7 @@ export default function RootLayout({
     <ClerkProvider afterSignOutUrl={"/"}>
       <html lang="en" suppressHydrationWarning >
         <body className={`${inter.className} antialiased`}>
-          <Toaster />
+          <Toaster richColors />
           <TRPCProviderClient>{children}</TRPCProviderClient>
         </body>
       </html>
