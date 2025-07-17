@@ -31,8 +31,16 @@ import VideoPlayer from "@/modules/videos/ui/components/video-player";
 import { useTRPC } from "@/trpc/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
-import { CopyCheckIcon, CopyIcon, MoreVerticalIcon, TrashIcon } from "lucide-react";
+import {
+  CopyCheckIcon,
+  CopyIcon,
+  Globe2Icon,
+  LockIcon,
+  MoreVerticalIcon,
+  TrashIcon,
+} from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { FC, Suspense, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { useForm } from "react-hook-form";
@@ -60,6 +68,7 @@ const FormSectionSkeleton: FC = () => {
 const FormSectionSuspense: FC<FormSectionProps> = ({ videoId }) => {
   const trpc = useTRPC();
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   const { data: video } = useSuspenseQuery(trpc.studio.getOne.queryOptions({ id: videoId }));
   const { data: categories } = useSuspenseQuery(trpc.categories.getMany.queryOptions());
@@ -74,6 +83,25 @@ const FormSectionSuspense: FC<FormSectionProps> = ({ videoId }) => {
           queryKey: trpc.studio.getOne.queryKey({ id: videoId }),
         });
         toast.success("Video Updated ");
+      },
+
+      onError: () => {
+        toast.error("Something went wrong");
+      },
+    })
+  );
+
+  const remove = useMutation(
+    trpc.videos.remove.mutationOptions({
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: trpc.studio.getMany.queryKey(),
+        });
+        queryClient.invalidateQueries({
+          queryKey: trpc.studio.getOne.queryKey({ id: videoId }),
+        });
+        toast.success("Video removed successfully");
+        router.push("/studio");
       },
 
       onError: () => {
@@ -120,7 +148,7 @@ const FormSectionSuspense: FC<FormSectionProps> = ({ videoId }) => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={() => remove.mutate({ id: videoId })}>
                   <TrashIcon className="size-4 mr-2" />
                   Delete
                 </DropdownMenuItem>
@@ -191,6 +219,40 @@ const FormSectionSuspense: FC<FormSectionProps> = ({ videoId }) => {
                 </FormItem>
               )}
             />
+
+            <FormField
+              control={form.control}
+              name="visibility"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Visibility</FormLabel>
+                  <FormControl>
+                    <Select onValueChange={field.onChange} defaultValue={field.value ?? undefined}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a visibility" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value={"public"}>
+                          <div className="flex items-center">
+                            <Globe2Icon className="size-4 mr-2" />
+                            Public
+                          </div>
+                        </SelectItem>
+                        <SelectItem value={"private"}>
+                          <div className="flex items-center">
+                            <LockIcon className="size-4 mr-2" />
+                            Private
+                          </div>
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
 
           <div className="flex flex-col gap-y-8 lg:col-span-2">
@@ -199,28 +261,25 @@ const FormSectionSuspense: FC<FormSectionProps> = ({ videoId }) => {
                 <VideoPlayer playbackId={video.muxPlaybackId} thumbnailUrl={video.thumbnailUrl} />
               </div>
               <div className="p-4 flex flex-col gap-y-6">
-                <div className="flex justify-between items-center gap-x-2">
-                  <div className="flex flex-col gap-y-1">
-                    <p className="text-muted-foreground text-xs">Video Link</p>
-                    <div className="flex items-center gap-x-2">
-                      <Link href={`/videos/${video.id}`}>
-                        <p className="line-clamp-1 text-sm text-blue-500">
-                          http://localhost:3000/123
-                        </p>
-                      </Link>
-                      <Button
-                        type="button"
-                        variant={"ghost"}
-                        className="shrink-0"
-                        onClick={onCopy}
-                        size={"icon"}
-                        disabled={isCopied}
-                      >
-                        {isCopied ? <CopyCheckIcon /> : <CopyIcon />}
-                      </Button>
-                    </div>
+                <div className="flex flex-col gap-y-1">
+                  <p className="text-muted-foreground text-xs">Video link</p>
+                  <div className="flex items-center gap-x-2">
+                    <Link href={`/videos/${video.id}`} className="flex-1 min-w-0">
+                      <p className="text-sm text-blue-500 truncate">{fullUrl}</p>
+                    </Link>
+                    <Button
+                      type="button"
+                      variant={"ghost"}
+                      className="shrink-0"
+                      onClick={onCopy}
+                      size={"icon"}
+                      disabled={isCopied}
+                    >
+                      {isCopied ? <CopyCheckIcon /> : <CopyIcon />}
+                    </Button>
                   </div>
                 </div>
+
                 <div className="flex justify-between items-center">
                   <div className="flex flex-col gap-y-1">
                     <p className="text-muted-foreground text-xs">Video status</p>

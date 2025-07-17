@@ -13,11 +13,9 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   autoPlay,
   onPlay,
 }) => {
-  if (!playbackId) return null;
-
   return (
     <MuxPlayer
-      playbackId={playbackId}
+      playbackId={playbackId || ""}
       poster={thumbnailUrl || "/placeholder.svg"}
       playerInitTime={0}
       autoPlay={autoPlay}

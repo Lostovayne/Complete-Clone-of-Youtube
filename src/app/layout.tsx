@@ -1,6 +1,5 @@
 import { TRPCProviderClient } from "@/providers";
 import { ClerkProvider } from "@clerk/nextjs";
-// import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
@@ -24,6 +23,7 @@ export const metadata: Metadata = {
   },
 };
 
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -31,7 +31,7 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider afterSignOutUrl={"/"}>
-      <html lang="en" suppressHydrationWarning >
+      <html lang="en" suppressHydrationWarning>
         <body className={`${inter.className} antialiased`}>
           <Toaster richColors />
           <TRPCProviderClient>{children}</TRPCProviderClient>

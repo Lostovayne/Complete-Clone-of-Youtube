@@ -1,6 +1,13 @@
 "use client";
 import { InfiniteScroll } from "@/components/infinite-scroll";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { DEFAULT_LIMIT } from "@/constants";
 import { snakeCaseToTitleCase } from "@/lib/utils";
 import { VideoThumbnail } from "@/modules/videos/ui/components/video-thumbnail";
@@ -52,7 +59,6 @@ const VideoSectionSkeleton = () => {
                     </div>
                   </div>
                 </TableCell>
-
                 <TableCell>
                   <div className="flex items-center">
                     <GlobeIcon className="size-4 mr-2" />
@@ -131,7 +137,9 @@ export const VideosSectionSuspense = () => {
                           />
                         </div>
                         <div className="flex flex-col overflow-hidden gap-y-1">
-                          <span className="text-sm text-muted-foreground line-clamp-1">{video.title}</span>
+                          <span className="text-sm text-muted-foreground line-clamp-1">
+                            {video.title}
+                          </span>
                           <span className="text-xs line-clamp-1">
                             {video.description || "No description"}
                           </span>
