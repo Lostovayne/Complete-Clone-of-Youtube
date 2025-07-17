@@ -124,9 +124,9 @@ export const VideosSectionSuspense = () => {
             {videos.pages
               .flatMap((page) => page.items)
               .map((video) => (
-                <Link href={`/studio/videos/${video.id}`} key={video.id} prefetch legacyBehavior>
-                  <TableRow className="cursor-pointer">
-                    <TableCell>
+                <TableRow key={video.id} className="cursor-pointer">
+                  <TableCell>
+                    <Link href={`/studio/videos/${video.id}`} prefetch className="block">
                       <div className="flex items-center gap-4">
                         <div className="relative aspect-video w-36 shrink-0">
                           <VideoThumbnail
@@ -145,28 +145,28 @@ export const VideosSectionSuspense = () => {
                           </span>
                         </div>
                       </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center">
-                        {video.visibility === "private" ? (
-                          <LockIcon className="size-4 mr-2" />
-                        ) : (
-                          <GlobeIcon className="size-4 mr-2" />
-                        )}
-                        {snakeCaseToTitleCase(video.visibility)}
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-sm truncate">
-                      <div className="flex items-center">
-                        {snakeCaseToTitleCase(video.muxStatus || "error loading")}
-                      </div>
-                    </TableCell>
-                    <TableCell>{format(video.createdAt, "d MMM yyyy")}</TableCell>
-                    <TableCell>Views</TableCell>
-                    <TableCell>Comments</TableCell>
-                    <TableCell>Likes</TableCell>
-                  </TableRow>
-                </Link>
+                    </Link>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex items-center">
+                      {video.visibility === "private" ? (
+                        <LockIcon className="size-4 mr-2" />
+                      ) : (
+                        <GlobeIcon className="size-4 mr-2" />
+                      )}
+                      {snakeCaseToTitleCase(video.visibility)}
+                    </div>
+                  </TableCell>
+                  <TableCell className="text-sm truncate">
+                    <div className="flex items-center">
+                      {snakeCaseToTitleCase(video.muxStatus || "error loading")}
+                    </div>
+                  </TableCell>
+                  <TableCell>{format(video.createdAt, "d MMM yyyy")}</TableCell>
+                  <TableCell>Views</TableCell>
+                  <TableCell>Comments</TableCell>
+                  <TableCell>Likes</TableCell>
+                </TableRow>
               ))}
           </TableBody>
         </Table>

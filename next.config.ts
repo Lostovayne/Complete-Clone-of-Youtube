@@ -21,6 +21,8 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+
+  experimental: { browserDebugInfoInTerminal: true },
 };
 
 export default nextConfig;
