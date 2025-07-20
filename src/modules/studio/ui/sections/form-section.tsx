@@ -35,17 +35,23 @@ import {
   CopyCheckIcon,
   CopyIcon,
   Globe2Icon,
+  ImagePlusIcon,
   LockIcon,
   MoreVerticalIcon,
+  RotateCcwIcon,
+  SparklesIcon,
   TrashIcon,
 } from "lucide-react";
+
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { FC, Suspense, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import { THUMBNAIL_FALLBACK } from "@/modules/videos/constants";
 
 interface FormSectionProps {
   videoId: string;
@@ -182,7 +188,7 @@ const FormSectionSuspense: FC<FormSectionProps> = ({ videoId }) => {
                     <Textarea
                       {...field}
                       value={field.value ?? ""}
-                      className="resize-none pr-10"
+                      className="resize-none"
                       rows={6}
                       placeholder="Add a description to your video"
                     />
@@ -193,6 +199,51 @@ const FormSectionSuspense: FC<FormSectionProps> = ({ videoId }) => {
             />
 
             {/* Todo: Add Thumbnail */}
+            <FormField
+              name="thumbnailUrl"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Thumbnail</FormLabel>
+                  <FormControl>
+                    <div className="p-0.5 border border-dashed border-neutral-400 relative h-[84px] w-[153px] group ">
+                      <Image
+                        alt="Thumbnail"
+                        src={video.thumbnailUrl || THUMBNAIL_FALLBACK}
+                        className="object-cover"
+                        fill
+                      />
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            type="button"
+                            size={"icon"}
+                            className="bg-black/50 hover:bg-black/50 absolute top-1 right-1 rounded-full opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity duration-300 size-7"
+                          >
+                            <MoreVerticalIcon className="text-white" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="start" side="right">
+                          <DropdownMenuItem>
+                            <ImagePlusIcon className="size-4 mr-" />
+                            Change
+                          </DropdownMenuItem>
+                          <DropdownMenuItem>
+                            <SparklesIcon className="size-4 mr-" />
+                            AI-generate
+                          </DropdownMenuItem>
+                          <DropdownMenuItem>
+                            <RotateCcwIcon className="size-4 mr-" />
+                            Restore
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+
             <FormField
               control={form.control}
               name="categoryId"
