@@ -1,5 +1,17 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+} from "@/components/ui/drawer";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 interface ResponsiveModalProps {
@@ -9,12 +21,7 @@ interface ResponsiveModalProps {
   onOpenChange: (isOpen: boolean) => void;
 }
 
-export const ResponsiveModal = ({
-  children,
-  title,
-  open,
-  onOpenChange,
-}: ResponsiveModalProps) => {
+export const ResponsiveModal = ({ children, title, open, onOpenChange }: ResponsiveModalProps) => {
   const isMobile = useIsMobile();
 
   if (isMobile) {
@@ -23,6 +30,9 @@ export const ResponsiveModal = ({
         <DrawerContent>
           <DrawerHeader>
             <DrawerTitle>{title}</DrawerTitle>
+            <DialogDescription>
+              Este Modal Muestra los valores disponibles para el usuario
+            </DialogDescription>
           </DrawerHeader>
           {children}
         </DrawerContent>
@@ -35,6 +45,9 @@ export const ResponsiveModal = ({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
+          <DialogDescription>
+            Este Modal Muestra los valores disponibles para el usuario
+          </DialogDescription>
         </DialogHeader>
         {children}
       </DialogContent>
