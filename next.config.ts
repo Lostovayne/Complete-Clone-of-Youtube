@@ -12,6 +12,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "stream.mux.com",
       },
+      {
+        protocol: "https",
+        hostname: "tbw27c7h9z.ufs.sh",
+      },
     ],
   },
 

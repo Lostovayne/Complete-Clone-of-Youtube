@@ -2,7 +2,7 @@
 @plugin 'tailwindcss-animate';
 
 @import "uploadthing/tw/v4";
-@source "../node_modules/@uploadthing/react/dist" 
+@source "../../node_modules/@uploadthing/react/dist" 
 
 @custom-variant dark (&:is(.dark *));
 
