@@ -43,15 +43,15 @@ import {
   TrashIcon,
 } from "lucide-react";
 
+import { THUMBNAIL_FALLBACK } from "@/modules/videos/constants";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import { FC, Suspense, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
-import { THUMBNAIL_FALLBACK } from "@/modules/videos/constants";
 import { ThumbnailUploadModal } from "../components/thumbnail-upload-modal";
 
 interface FormSectionProps {
@@ -111,6 +111,24 @@ const FormSectionSuspense: FC<FormSectionProps> = ({ videoId }) => {
         });
         toast.success("Video removed successfully");
         router.push("/studio");
+      },
+
+      onError: () => {
+        toast.error("Something went wrong");
+      },
+    })
+  );
+
+  const restoreThumbnail = useMutation(
+    trpc.videos.restoreThumbnail.mutationOptions({
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: trpc.studio.getMany.queryKey(),
+        });
+        queryClient.invalidateQueries({
+          queryKey: trpc.studio.getOne.queryKey({ id: videoId }),
+        });
+        toast.success("Thumbnail restored successfully");
       },
 
       onError: () => {
@@ -242,7 +260,9 @@ const FormSectionSuspense: FC<FormSectionProps> = ({ videoId }) => {
                               <SparklesIcon className="size-4 mr-" />
                               AI-generate
                             </DropdownMenuItem>
-                            <DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() => restoreThumbnail.mutate({ id: videoId })}
+                            >
                               <RotateCcwIcon className="size-4 mr-" />
                               Restore
                             </DropdownMenuItem>
