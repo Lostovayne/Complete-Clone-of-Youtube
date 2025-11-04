@@ -7,22 +7,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 
 import { videoUpdateSchema } from "@/db/schema";
@@ -47,7 +34,7 @@ import { THUMBNAIL_FALLBACK } from "@/modules/videos/constants";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FC, Suspense, useState } from "react";
+import { FC, Suspense, useEffect, useMemo, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -79,7 +66,11 @@ const FormSectionSuspense: FC<FormSectionProps> = ({ videoId }) => {
 
   const [thumbnailModalOpen, setThumbnailModalOpen] = useState<boolean>(false);
 
-  const { data: video } = useSuspenseQuery(trpc.studio.getOne.queryOptions({ id: videoId }));
+  const studioManyQueryKey = useMemo(() => trpc.studio.getMany.queryKey(), [trpc]);
+
+  const { data: video, refetch: refetchVideo } = useSuspenseQuery(
+    trpc.studio.getOne.queryOptions({ id: videoId })
+  );
   const { data: categories } = useSuspenseQuery(trpc.categories.getMany.queryOptions());
 
   const update = useMutation(
@@ -142,6 +133,10 @@ const FormSectionSuspense: FC<FormSectionProps> = ({ videoId }) => {
     defaultValues: video,
   });
 
+  useEffect(() => {
+    form.reset(video);
+  }, [video, form]);
+
   const onSubmit = async (data: z.infer<typeof videoUpdateSchema>) => {
     update.mutate(data);
   };
@@ -149,6 +144,27 @@ const FormSectionSuspense: FC<FormSectionProps> = ({ videoId }) => {
   // ->  URL Change if deploying outside of Vercel
   const fullUrl = `${process.env.VERCEL_URL || "http://localhost:3000"}/videos/${videoId}`;
   const [isCopied, setIsCopied] = useState(false);
+
+  const shouldPoll =
+    (video.muxStatus && video.muxStatus !== "ready") ||
+    (video.muxTrackStatus && video.muxTrackStatus !== "ready") ||
+    !video.thumbnailUrl ||
+    !video.previewUrl ||
+    !video.muxPlaybackId;
+
+  useEffect(() => {
+    if (!shouldPoll) return;
+    const intervalId = setInterval(() => {
+      void refetchVideo();
+      void queryClient.invalidateQueries({
+        queryKey: studioManyQueryKey,
+      });
+    }, 5000);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [shouldPoll, refetchVideo, queryClient, studioManyQueryKey]);
 
   const onCopy = async () => {
     await navigator.clipboard.writeText(fullUrl);
@@ -260,9 +276,7 @@ const FormSectionSuspense: FC<FormSectionProps> = ({ videoId }) => {
                               <SparklesIcon className="size-4 mr-" />
                               AI-generate
                             </DropdownMenuItem>
-                            <DropdownMenuItem
-                              onClick={() => restoreThumbnail.mutate({ id: videoId })}
-                            >
+                            <DropdownMenuItem onClick={() => restoreThumbnail.mutate({ id: videoId })}>
                               <RotateCcwIcon className="size-4 mr-" />
                               Restore
                             </DropdownMenuItem>
@@ -281,10 +295,7 @@ const FormSectionSuspense: FC<FormSectionProps> = ({ videoId }) => {
                   <FormItem>
                     <FormLabel>Category</FormLabel>
                     <FormControl>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value ?? undefined}
-                      >
+                      <Select onValueChange={field.onChange} defaultValue={field.value ?? undefined}>
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Select a category" />
@@ -311,10 +322,7 @@ const FormSectionSuspense: FC<FormSectionProps> = ({ videoId }) => {
                   <FormItem>
                     <FormLabel>Visibility</FormLabel>
                     <FormControl>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value ?? undefined}
-                      >
+                      <Select onValueChange={field.onChange} defaultValue={field.value ?? undefined}>
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Select a visibility" />
@@ -370,9 +378,7 @@ const FormSectionSuspense: FC<FormSectionProps> = ({ videoId }) => {
                   <div className="flex justify-between items-center">
                     <div className="flex flex-col gap-y-1">
                       <p className="text-muted-foreground text-xs">Video status</p>
-                      <p className="text-sm">
-                        {snakeCaseToTitleCase(video.muxStatus || "preparing")}
-                      </p>
+                      <p className="text-sm">{snakeCaseToTitleCase(video.muxStatus || "preparing")}</p>
                     </div>
                   </div>
 

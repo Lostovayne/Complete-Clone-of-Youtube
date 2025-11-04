@@ -1,13 +1,6 @@
 "use client";
 import { InfiniteScroll } from "@/components/infinite-scroll";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { DEFAULT_LIMIT } from "@/constants";
 import { snakeCaseToTitleCase } from "@/lib/utils";
 import { VideoThumbnail } from "@/modules/videos/ui/components/video-thumbnail";
@@ -19,7 +12,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import { Skeleton } from "@/components/ui/skeleton";
 import { GlobeIcon, LockIcon } from "lucide-react";
 import Link from "next/link";
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
 
 export const VideosSection = () => {
   return (
@@ -94,6 +87,7 @@ export const VideosSectionSuspense = () => {
     hasNextPage,
     isFetchingNextPage,
     fetchNextPage,
+    refetch,
   } = useSuspenseInfiniteQuery(
     trpc.studio.getMany.infiniteQueryOptions(
       { limit: DEFAULT_LIMIT },
@@ -104,6 +98,27 @@ export const VideosSectionSuspense = () => {
       }
     )
   );
+
+  const shouldPoll = videos.pages.some((page) =>
+    page.items.some(
+      (video) =>
+        [video.muxStatus, video.muxTrackStatus].some((status) => status && status !== "ready") ||
+        !video.thumbnailUrl ||
+        !video.previewUrl ||
+        !video.muxPlaybackId
+    )
+  );
+
+  useEffect(() => {
+    if (!shouldPoll) return;
+    const intervalId = setInterval(() => {
+      void refetch();
+    }, 5000);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [shouldPoll, refetch]);
 
   return (
     <div>

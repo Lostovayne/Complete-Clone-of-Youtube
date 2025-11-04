@@ -7,6 +7,15 @@ import { and, eq } from "drizzle-orm";
 import { UTApi } from "uploadthing/server";
 import z from "zod";
 
+const ensureMuxCredentials = () => {
+  if (!process.env.MUX_TOKEN_ID || !process.env.MUX_TOKEN_SECRET) {
+    throw new TRPCError({
+      code: "INTERNAL_SERVER_ERROR",
+      message: "Missing Mux credentials. Set MUX_TOKEN_ID and MUX_TOKEN_SECRET.",
+    });
+  }
+};
+
 export const videosRouter = createTRPCRouter({
   restoreThumbnail: protectedProcedure
     .input(z.object({ id: z.uuid() }))
@@ -87,47 +96,56 @@ export const videosRouter = createTRPCRouter({
   }),
   create: protectedProcedure.mutation(async ({ ctx }) => {
     const { id: userId } = ctx.user;
-    // Upload videos to Mux
-    const upload = await mux.video.uploads.create({
-      new_asset_settings: {
-        passthrough: userId,
-        playback_policies: ["public"],
-        static_renditions: [
-          {
-            resolution: "highest",
-          },
-          {
-            resolution: "audio-only",
-          },
-        ],
-        input: [
-          {
-            generated_subtitles: [
-              {
-                language_code: "en",
-                name: "English",
-              },
-            ],
-          },
-        ],
-        // mp4_support: "standard", // TODO: Property is deprecated
-      },
-      cors_origin: "*", // TODO: In production this should be restricted to the domain of the app
-    });
 
-    const [video] = await db
-      .insert(videos)
-      .values({
-        userId,
-        title: "Untitled",
-        muxStatus: "waiting",
-        muxUploadId: upload.id,
-      })
-      .returning();
+    try {
+      ensureMuxCredentials();
 
-    return {
-      video: video,
-      url: upload.url,
-    };
+      const upload = await mux.video.uploads.create({
+        new_asset_settings: {
+          passthrough: userId,
+          playback_policies: ["public"],
+          static_renditions: [
+            {
+              resolution: "highest",
+            },
+            {
+              resolution: "audio-only",
+            },
+          ],
+          input: [
+            {
+              generated_subtitles: [
+                {
+                  language_code: "en",
+                  name: "English",
+                },
+              ],
+            },
+          ],
+        },
+        cors_origin: "*", // TODO: In production this should be restricted to the domain of the app
+      });
+
+      const [video] = await db
+        .insert(videos)
+        .values({
+          userId,
+          title: "Untitled",
+          muxStatus: "waiting",
+          muxUploadId: upload.id,
+        })
+        .returning();
+
+      return {
+        video,
+        url: upload.url,
+      };
+    } catch (error) {
+      console.error("Failed to create Mux upload", error);
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Unable to create upload. Check your Mux credentials and quota.",
+      });
+    }
   }),
 });
