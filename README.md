@@ -28,13 +28,14 @@
 - API type-safe (tRPC)
 - ORM y base de datos (Drizzle ORM + NeonDB)
 - Rate limiting y caching (Upstash Redis)
+- Pipeline de subida de video con Mux Direct Uploads + thumbnails vía UploadThing
+- Webhooks de Mux + UploadThing enrutados con revalidación automática en el dashboard
+- Prefetching, polling inteligente y data fetching eficiente (React Query)
 - Componentes reutilizables y arquitectura modular
-- Prefetching y data fetching eficiente (React Query)
 - Scripts de seed y utilidades para desarrollo
 
 ### 🛠️ En desarrollo y próximos pasos
 
-- Subida y procesamiento de videos (cloud storage)
 - Perfiles y canales de usuario personalizables
 - Recomendaciones de video inteligentes
 - Sistema de comentarios en tiempo real
@@ -46,15 +47,19 @@
 
 ---
 
-## 🚨 Registro de Usuarios y Subida de Videos (Contexto Actual)
+## 🚨 Webhooks y flujo de subida
 
-Actualmente, **los registros válidos de usuarios para poder subir videos** se gestionan a través de un webhook temporal en:
+- **Mux Direct Uploads** genera los assets y dispara webhooks cuando el asset cambia de estado (created, ready, track ready, deleted, errored).
+- **UploadThing** recibe las thumbnails/preview generadas desde Mux (vía `uploadFilesFromUrl`) y las persiste para el dashboard.
+- El handler `/api/videos/webhook` vuelve a validar la firma de Mux y actualiza la base de datos, refrescando thumbnail, preview, duraciones y estados.
+- El área de estudio (`/studio`) hace polling inteligente hasta que el asset queda listo, por lo que el estado cambia en vivo sin refrescar.
+- Para desarrollo local sigue siendo necesario exponer el servidor con ngrok para que Mux pueda llamar a los webhooks.
+
+Ejemplo de túnel temporal:
 
 ```
 ngrok http --url=musical-stag-luckily.ngrok-free.app 3000
 ```
-
-Esto es una solución temporal mientras el proyecto no tenga dominio HTTPS propio. El webhook que almacena los usuarios en la base de datos está apuntando allí. ¡En cuanto tenga dominio y SSL, se actualizará!
 
 ---
 
@@ -77,6 +82,8 @@ Esto es una solución temporal mientras el proyecto no tenga dominio HTTPS propi
 - **Drizzle ORM** (PostgreSQL, NeonDB)
 - **Upstash Redis** (caching y rate limiting)
 - **Clerk** (autenticación y gestión de usuarios)
+- **Mux** (direct uploads, playback, tracks)
+- **UploadThing** (gestión de thumbnails y assets derivados)
 - **Svix** (webhooks)
 - **SuperJSON** (serialización avanzada)
 
@@ -130,9 +137,16 @@ config files     # Configuración (Tailwind, ESLint, Drizzle, etc.)
    ```env
    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=tu_clerk_publishable_key
    CLERK_SECRET_KEY=tu_clerk_secret_key
+   CLERK_SIGNING_SECRET=tu_clerk_signing_secret
    DATABASE_URL=tu_neondb_url
    UPSTASH_REDIS_REST_URL=tu_redis_url
    UPSTASH_REDIS_REST_TOKEN=tu_redis_token
+   MUX_TOKEN_ID=tu_mux_token_id
+   MUX_TOKEN_SECRET=tu_mux_token_secret
+   MUX_WEBHOOK_SECRET=tu_mux_webhook_secret
+   UPLOADTHING_TOKEN=tu_uploadthing_token
+   # Opcional
+   UPLOADTHING_LOG_LEVEL=error
    ```
 4. **Seed de la base de datos**
    ```bash
@@ -146,12 +160,13 @@ config files     # Configuración (Tailwind, ESLint, Drizzle, etc.)
    # o
    npm run dev
    ```
-6. **(Opcional) Ejecuta el webhook temporal**
+6. **(Recomendado) Levanta túnel para webhooks**
    ```bash
    bun run dev:all
    # o
    npm run dev:all
    ```
+   Esto levanta `next dev` y el script de ngrok (`scripts/start-ngrok.mjs`).
 7. Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
 
 ---
@@ -159,7 +174,8 @@ config files     # Configuración (Tailwind, ESLint, Drizzle, etc.)
 ## 🧩 Scripts Disponibles
 
 - `bun dev` / `npm run dev` — Modo desarrollo
-- `bun run dev:all` — Dev + webhook ngrok
+- `bun run dev:all` / `npm run dev:all` — Dev + túnel ngrok para webhooks
+- `bun run dev:webhook` / `npm run dev:webhook` — Solo túnel ngrok
 - `bun build` / `npm run build` — Build de producción
 - `bun start` / `npm start` — Producción
 - `bun lint` / `npm run lint` — Linter
@@ -172,7 +188,7 @@ config files     # Configuración (Tailwind, ESLint, Drizzle, etc.)
 - **Modularidad total:** Cada feature es un módulo autocontenible.
 - **Fullstack type-safe:** tRPC conecta cliente y servidor con tipado extremo.
 - **UI accesible y moderna:** Radix UI + Tailwind + animaciones.
-- **Performance y escalabilidad:** SSR, caching, prefetching, bundle splitting.
+- **Performance y escalabilidad:** SSR, caching, prefetching, polling progresivo y bundle splitting.
 - **Seguridad:** Clerk, validación Zod, rate limiting, CSRF, variables seguras.
 - **Personalización:** Todo el código y diseño reflejan mi estilo y visión.
 
